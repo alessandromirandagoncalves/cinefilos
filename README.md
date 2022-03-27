@@ -1,4 +1,5 @@
-# cinefilos
+# Instruções de uso
 
-Sistema de controle de séries/filmes já assistidos.
-Utiliza MySql e node.js
+- Instalar componentes do backend e frontend (npm i)
+- Backend na porta 5000
+- Frontend na porta 3000

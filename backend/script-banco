@@ -1,0 +1,111 @@
+-- phpMyAdmin SQL Dump
+-- version 5.1.3
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Tempo de geração: 27-Mar-2022 às 14:41
+-- Versão do servidor: 10.4.24-MariaDB
+-- versão do PHP: 8.1.4
+-- Criado por Alessandro Miranda a partir do projeto
+-- Bootcamp Data engineer Cognizant
+-- www.linkedin.com/alessandromirandagoncalves
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- Banco de dados: `cinefilo`
+--
+CREATE DATABASE IF NOT EXISTS `cinefilo` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `cinefilo`;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `filmes`
+--
+
+CREATE TABLE `filmes` (
+  `id` int(11) NOT NULL,
+  `tipo` tinyint(6) NOT NULL,
+  `nome` varchar(50) NOT NULL,
+  `total_ep` tinyint(6) DEFAULT NULL,
+  `episodio_atual` tinyint(6) DEFAULT NULL,
+  `ultimo_acesso` date DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tipo_filmes`
+--
+
+CREATE TABLE `tipo_filmes` (
+  `id` tinyint(4) NOT NULL,
+  `descricao` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura stand-in para vista `vw_filmes_tipos`
+-- (Veja abaixo para a view atual)
+--
+CREATE TABLE `vw_filmes_tipos` (
+`id` int(11)
+,`tipo` varchar(10)
+,`nome` varchar(50)
+,`total_ep` tinyint(6)
+,`episodio_atual` tinyint(6)
+,`ultimo_acesso` varchar(10)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para vista `vw_filmes_tipos`
+--
+DROP TABLE IF EXISTS `vw_filmes_tipos`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_filmes_tipos`  AS SELECT `f`.`id` AS `id`, `tf`.`descricao` AS `tipo`, `f`.`nome` AS `nome`, `f`.`total_ep` AS `total_ep`, `f`.`episodio_atual` AS `episodio_atual`, date_format(`f`.`ultimo_acesso`,'%d/%m/%Y') AS `ultimo_acesso` FROM (`filmes` `f` join `tipo_filmes` `tf` on(`f`.`tipo` = `tf`.`id`))  ;
+
+--
+-- Índices para tabelas despejadas
+--
+
+--
+-- Índices para tabela `filmes`
+--
+ALTER TABLE `filmes`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nome` (`nome`),
+  ADD KEY `fk_tipo_filmes` (`tipo`),
+  ADD KEY `nome_2` (`nome`);
+
+--
+-- Índices para tabela `tipo_filmes`
+--
+ALTER TABLE `tipo_filmes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de tabelas despejadas
+--
+
+--
+-- AUTO_INCREMENT de tabela `filmes`
+--
+ALTER TABLE `filmes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Restrições para despejos de tabelas
+--
+
+--
+-- Limitadores para a tabela `filmes`
+--
+ALTER TABLE `filmes`
+  ADD CONSTRAINT `fk_tipo_filmes` FOREIGN KEY (`tipo`) REFERENCES `tipo_filmes` (`id`);
+COMMIT;
