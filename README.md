@@ -1,4 +1,4 @@
 # cinefilos
 
 Sistema de controle de séries/filmes já assistidos.
-Usa MYSql e node.js
+Utiliza MySql e node.js
